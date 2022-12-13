@@ -1,0 +1,3 @@
+[submodule "libthread"]
+	path = libthread
+	url = https://github.com/ittiam-systems/libthread.git

@@ -1,0 +1,97 @@
+###############################################################################
+##                                                                           ##
+##            Film Grain Noise Synthesizer Configuration File                ##
+##                                                                           ##
+###############################################################################
+
+#-----------------------------------#
+#	Input Params		                  #
+#-----------------------------------#
+
+#-----------------------------------------------------------------------------#
+# # Input Params Example 						                                          #
+# INPUT_PARAMS_START 							                                            #
+# input_yuv_file_name		= input.yuv /* Path to decoded YUV */		              #
+# output_yuv_file_name  = output.yuv /* Output YUV with FGN blended */	      #
+# num_frames     		    = 50 /* add logic for this */	                        #
+# width 			          =	1920                                                #
+# height			          =	1080                                                #
+# bit_depth			        =	8                                                   #
+# chroma_format					=	1 /* 0 : monochrome; 1: 420; 2: 422; 3: 444 */      #
+# enable_deblocking			=	1 /* specify default values for all these */        #
+# num_threads           = 4 /* Range: [1, 4] */                               #
+# num_profiles          = 2 /* Number of FGC params profile to use */         #
+# INPUT_PARAMS_END                                                            #
+#-----------------------------------------------------------------------------#
+
+#-----------------------------------#
+# Film Grain Charactersitics Params #
+#-----------------------------------#
+
+#-----------------------------------------------------------------------------------------------------------#
+# # FGC Params Profile Example	                                                                            #
+# FGC_PARAMS_PROFILE_START                                                                                  #
+# start_frame_num			                      =	0	 /* FGC Params applicable from start_frame_num */	          #
+# end_frame_num				                      =	80 /* FGC Params applicable till end_frame_num */             #
+# film_grain_characteristics_cancel_flag    =	0	 /* Range: [0,1]	*/	                                      #
+# film_grain_model_id			                  =	0	 /* 0: [Frequency Filtering] 1: [Auto Regression] */	      #
+# separate_colour_description_present_flag  =	0	 /* Range: [0,1]	*/                                        #
+# blending_mode_id			                    =	0	 /* 0: [additive blending] 1: [multiplicative blending] */	#
+# log2_scale_factor			                    =	2	 /* Range: [0,15] */	                                      #
+# comp_model_present_flag		                =	1,1,1	/* Comma-separated values for Y,U & V; Range: [0,1] */	#
+# num_intensity_intervals_minus1	          =	1,1,1	/* Comma-separated values for Y,U & V; Range: [0,255]*/	#
+# num_model_values_minus1		                =	2,2,2	/* Comma-separated values for Y,U & V; Range: [0,5] */	#
+#  																			                                                                    #
+# /* Comma-separated lb and ub values for y,u,v for every "ith" intensity interval                          #
+# (y_i1,y_i2,y_i3,..,u_i1,ui2,..,v_i1,..,etc.); Range: [0,2^(bitdepth)-1], lb <= ub */	                    #
+# intensity_interval_lower_bound	          =	0,135,60,90,90,225	                                          #
+# intensity_interval_upper_bound	          =	130,255,70,140,110,255                                        #
+#                                                                                                           #
+# /* Comma-separated 'j' component model values  for y,u,v for every "ith" intensity interval */	          #
+# /* (y_i1[0],y_i1[1],..,y_i2[0],..y_i2[3],..,u_i1[0],u_i1[1],.. ,u_i3[0],..,v_i1[0],..,v_i3[0],etc.)	*/	  #
+# /* Range: [0,255] for i[0], [0,16) for others, i[3] <= i[1], i[4] <= i[2] */	                            #
+# comp_model_value						            =	60,6,3,120,13,6,15,13,8,10,6,6,220,3,14,110,14,3	              #
+# FGC_PARAMS_PROFILE_END	 								                                                                  #
+#-----------------------------------------------------------------------------------------------------------#
+
+
+# Input Params Example
+INPUT_PARAMS_START
+input_yuv_file_name							=	F:\yuvs\FGN_YUVs\stripes4_color_8bit_420.yuv
+output_yuv_file_name						=	output.yuv
+num_frames									    =	500
+width										        =	1920
+height										      =	1080
+bit_depth									      =	8
+chroma_format								    =	1
+num_threads                     = 4
+num_profiles                    = 1
+INPUT_PARAMS_END
+
+# FGC Params Profile 
+FGC_PARAMS_PROFILE_START
+start_frame_num								            =	0
+end_frame_num								              =	250
+film_grain_characteristics_cancel_flag 	  =	0
+log2_scale_factor							            =	2
+comp_model_present_flag						        =	1,1,1
+num_intensity_intervals_minus1				    =	0,0,0
+num_model_values_minus1						        =	2,2,2
+intensity_interval_lower_bound				    =	1,1,1
+intensity_interval_upper_bound				    =	255,255,255
+comp_model_value							            =	80,2,2,20,2,2,40,2,2
+FGC_PARAMS_PROFILE_END
+
+# FGC Params Profile 
+FGC_PARAMS_PROFILE_START
+start_frame_num								            =	250
+end_frame_num								              =	500  
+film_grain_characteristics_cancel_flag 	  =	0
+log2_scale_factor							            =	2
+comp_model_present_flag						        =	1,1,1
+num_intensity_intervals_minus1				    =	0,0,0
+num_model_values_minus1						        =	2,2,2
+intensity_interval_lower_bound				    =	1,1,1
+intensity_interval_upper_bound				    =	255,255,255
+comp_model_value							            =	80,2,2,20,2,2,40,2,2
+FGC_PARAMS_PROFILE_END
