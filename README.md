@@ -12,7 +12,7 @@ This library implements Film Grain Synthesis based on SMPTE-RDD5 [frequency-filt
 
 ### **Prerequisites**
 * cmake >= 3.25
-* gcc / clang toolchain (For x86-64 and aarch64 Linux builds)
+* gcc >= 4.8.5 / clang toolchain (For x86-64 and aarch64 Linux builds)
 * Visual Studio (For Windows builds)
 
 ### ***After Cloning***
@@ -22,7 +22,7 @@ This library implements Film Grain Synthesis based on SMPTE-RDD5 [frequency-filt
     cd ${libfgsPath}
     git submodule update --init --recursive
   ```
-### **Building for x86-64 Linux**
+### **Building for x86-64 Linux and MacOS**
 1. Create a buildtree
   ```
     libfgsPath=<Path to libfgs repo>
