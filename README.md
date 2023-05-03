@@ -95,3 +95,7 @@ Please refer to the [guidelines](GUIDELINES.md) for the following processes
 - Reporting issues
 - Creating Pull Request
 - Commit message standards
+
+## **License**
+A BSD 3-Clause-Clear license is applicable. Refer to the [LICENSE](https://github.com/ittiam-systems/libfgs/blob/main/LICENSE) file together with the [LICENSE2](https://github.com/ittiam-systems/libfgs/blob/main/LICENSE2) file.
+

@@ -1,0 +1,15 @@
+Refer to README AND LICENSE for additional information relating to LICENSE2
+
+None of the names of Ittiam Systems Pvt. Ltd., its affiliates, investors, business partners, 
+nor the names of its contributors may be used to endorse or promote products derived from this 
+software without specific prior written permission.
+
+This Software is an implementation of the AVC/H.264 standard by Ittiam Systems Pvt. Ltd. (“Ittiam”). 
+Additional patent licenses may be required for this Software, including, but not limited to, a license 
+from MPEG LA’s AVC/H.264 licensing program (see https://www.mpegla.com/programs/avc-h-264/).
+
+NOTWITHSTANDING ANYTHING TO THE CONTRARY, THIS (including information in README, LICENSE and LICENSE2) 
+DOES NOT GRANT ANY EXPRESS OR IMPLIED LICENSES TO ANY PATENT CLAIMS OF ANY AFFILIATE (TO THE EXTENT 
+NOT IN THE LEGAL ENTITY), INVESTOR, OR OTHER BUSINESS PARTNER OF ITTIAM. You may only use this software 
+or modifications thereto for purposes that are authorized by appropriate patent licenses. You should 
+seek legal advice based upon your implementation details.
