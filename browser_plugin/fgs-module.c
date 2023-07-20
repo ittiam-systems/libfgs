@@ -6,11 +6,9 @@
 #include <stdlib.h>
 #include <assert.h>
 
-#include "error_codes.h"
-#include "fgs_api.h"
-#include "decode-avc-priv.h"
+#include "../fgs/api/error_codes.h"
+#include "../fgs/api/fgs_api.h"
 #include "fgs-module-priv.h"
-#include "ithread.h"
 
 GrainCharacteristicApi fgcCTx = {0};
 FGSInitParams initParams = {0};
