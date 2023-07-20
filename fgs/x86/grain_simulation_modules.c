@@ -273,7 +273,8 @@ uint32_t block_avg_16x16_8bit(uint8_t *decSampleBlk8, uint32_t widthComp, uint16
   return blockAvg;
 }
 
-void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, int16_t *grainStripe, uint32_t widthComp,
+void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, uint16_t *outSampleHbdOffsetY, int16_t *grainStripe,
+                        uint32_t widthComp, uint32_t decSampleStride, uint32_t outSampleStride,
                         uint32_t grainStripeWidth, uint32_t blockHeight, uint8_t bitDepth)
 {
   uint32_t k, l;
@@ -295,11 +296,14 @@ void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, int16_t *grainStripe, uin
         __m128i __m128i_sum     = _mm_add_epi16(__m128i_decData, __m128i_grainSt);
         __m128i_sum             = _mm_min_epi16(__m128i_sum, __m128i_maxrange);
         __m128i_sum             = _mm_max_epi16(__m128i_sum, __m128i_minZero);
-        _mm_store_si128((__m128i *) decSampleHbdOffsetY, __m128i_sum);
+        _mm_store_si128((__m128i *) outSampleHbdOffsetY, __m128i_sum);
         decSampleHbdOffsetY += BLK_8;
+		outSampleHbdOffsetY += BLK_8;
         grainStripe += BLK_8;
       }
-      grainStripe += grainStripeWidth - widthComp;
+	  decSampleHbdOffsetY += decSampleStride - widthComp;
+	  outSampleHbdOffsetY += outSampleStride - widthComp;
+      grainStripe         += grainStripeWidth - widthComp;
     }
   }
   else
@@ -315,8 +319,9 @@ void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, int16_t *grainStripe, uin
         __m128i __m128i_sum     = _mm_add_epi16(__m128i_decData, __m128i_grainSt);
         __m128i_sum             = _mm_min_epi16(__m128i_sum, __m128i_maxrange);
         __m128i_sum             = _mm_max_epi16(__m128i_sum, __m128i_minZero);
-        _mm_storeu_si128((__m128i *) decSampleHbdOffsetY, __m128i_sum);
+        _mm_storeu_si128((__m128i *) outSampleHbdOffsetY, __m128i_sum);
         decSampleHbdOffsetY += BLK_8;
+		outSampleHbdOffsetY += BLK_8;
         grainStripe += BLK_8;
       }
       for (; k < widthComp; k++)
@@ -324,17 +329,21 @@ void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, int16_t *grainStripe, uin
         decodeSample         = *decSampleHbdOffsetY;
         grainSample          = *grainStripe;
         grainSample          = CLIP3(0, maxRange, (grainSample + decodeSample));
-        *decSampleHbdOffsetY = (uint16_t) grainSample;
+        *outSampleHbdOffsetY = (uint16_t) grainSample;
         decSampleHbdOffsetY++;
+		outSampleHbdOffsetY++;
         grainStripe++;
       }
-      grainStripe += grainStripeWidth - widthComp;
+	  decSampleHbdOffsetY += decSampleStride - widthComp;
+	  outSampleHbdOffsetY += outSampleStride - widthComp;
+      grainStripe         += grainStripeWidth - widthComp;
     }
   }
 }
 
-void blend_stripe_8bit(uint8_t *decSampleOffsetY, int8_t *grainStripe, uint32_t widthComp, uint32_t grainStripeWidth,
-                       uint32_t blockHeight, uint8_t bitDepth)
+void blend_stripe_8bit(uint8_t *decSampleOffsetY, uint8_t *outSampleOffsetY, int8_t *grainStripe, 
+                       uint32_t widthComp, uint32_t decSampleStride, uint32_t outSampleStride,
+					   uint32_t grainStripeWidth, uint32_t blockHeight, uint8_t bitDepth)
 {
   uint32_t k, l;
 
@@ -356,11 +365,14 @@ void blend_stripe_8bit(uint8_t *decSampleOffsetY, int8_t *grainStripe, uint32_t 
         __m128i __m128i_sum1 = _mm_add_epi16(__m128i_decData1, __m128i_grainSt1);
         __m128i __m128i_sum2 = _mm_add_epi16(__m128i_decData2, __m128i_grainSt2);
         __m128i __m128i_sum  = _mm_packus_epi16(__m128i_sum1, __m128i_sum2);
-        _mm_storeu_si128((__m128i *) decSampleOffsetY, __m128i_sum);
+        _mm_storeu_si128((__m128i *) outSampleOffsetY, __m128i_sum);
         decSampleOffsetY += BLK_16;
+		outSampleOffsetY += BLK_16;
         grainStripe += BLK_16;
       }
-      grainStripe += grainStripeWidth - widthComp;
+	  decSampleOffsetY += decSampleStride - widthComp;
+	  outSampleOffsetY += outSampleStride - widthComp;
+      grainStripe      += grainStripeWidth - widthComp;
     }
   }
   else
@@ -385,8 +397,9 @@ void blend_stripe_8bit(uint8_t *decSampleOffsetY, int8_t *grainStripe, uint32_t 
         __m128i __m128i_sum1 = _mm_add_epi16(__m128i_decData1, __m128i_grainSt1);
         __m128i __m128i_sum2 = _mm_add_epi16(__m128i_decData2, __m128i_grainSt2);
         __m128i __m128i_sum  = _mm_packus_epi16(__m128i_sum1, __m128i_sum2);
-        _mm_storeu_si128((__m128i *) decSampleOffsetY, __m128i_sum);
+        _mm_storeu_si128((__m128i *) outSampleOffsetY, __m128i_sum);
         decSampleOffsetY += BLK_16;
+		outSampleOffsetY += BLK_16;
         grainStripe += BLK_16;
       }
       for (; k < widthComp; k++)
@@ -394,11 +407,14 @@ void blend_stripe_8bit(uint8_t *decSampleOffsetY, int8_t *grainStripe, uint32_t 
         decodeSample      = *decSampleOffsetY;
         grainSample       = *grainStripe;
         grainSample       = CLIP3(0, maxRange, (grainSample + decodeSample));
-        *decSampleOffsetY = (uint8_t) grainSample;
+        *outSampleOffsetY = (uint8_t) grainSample;
         decSampleOffsetY++;
+		outSampleOffsetY++;
         grainStripe++;
       }
-      grainStripe += grainStripeWidth - widthComp;
+	  decSampleOffsetY += decSampleStride - widthComp;
+	  outSampleOffsetY += outSampleStride - widthComp;
+      grainStripe      += grainStripeWidth - widthComp;
     }
   }
 }

@@ -67,10 +67,12 @@ extern uint32_t block_avg_8x8_8bit(uint8_t *decSampleBlk8, uint32_t widthComp, u
 extern uint32_t block_avg_16x16_8bit(uint8_t *decSampleBlk8, uint32_t widthComp, uint16_t *pNumSamples, uint32_t ySize,
                                      uint32_t xSize, uint8_t shift_Size, uint8_t bitDepth);
 
-void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, int16_t *grainStripe, uint32_t widthComp,
-                        uint32_t grainStripeWidth, uint32_t blockHeight, uint8_t bitDepth);
+void blend_stripe_10bit(uint16_t *decSampleHbdOffsetY, uint16_t *outSampleHbdOffsetY,  int16_t *grainStripe, uint32_t widthComp, 
+                        uint32_t decSampleStride, uint32_t outSampleStride, uint32_t grainStripeWidth, 
+						uint32_t blockHeight, uint8_t bitDepth);
 
-void blend_stripe_8bit(uint8_t *decSampleOffsetY, int8_t *grainStripe, uint32_t widthComp, uint32_t grainStripeWidth,
+void blend_stripe_8bit(uint8_t *decSampleOffsetY, uint8_t *outSampleOffsetY, int8_t *grainStripe, uint32_t widthComp,
+                       uint32_t decSampleStride, uint32_t outSampleStride, uint32_t grainStripeWidth,
                        uint32_t blockHeight, uint8_t bitDepth);
 
 void deblock_grain_stripe(int8_t *grainStripe, uint32_t widthComp, uint32_t strideComp, int8_t blkW, int8_t blkH);
