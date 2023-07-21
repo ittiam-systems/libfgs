@@ -190,7 +190,7 @@ int32_t get_next_parameter_allow_spaces(char *line, uint32_t line_length, uint32
       data[i] = '\0';
       --i;
     }
-    i += 1; /* Set the character to next position */
+    i += 1;       /* Set the character to next position */
   }
   data[i] = '\0'; /* Suffix with NULL character */
   return 1;
@@ -723,10 +723,10 @@ int main(int argc, char *argv[])
 {
   int32_t                status = 0;
   size_t                 bytesRead;
-  size_t                 sizeInBytes = 0;
-  uint32_t               frameNum    = 0;
-  FILE                  *cur_fp      = NULL;
-  FILE                  *outputFile  = NULL;
+  size_t                 sizeInBytes   = 0;
+  uint32_t               frameNum      = 0;
+  FILE                  *cur_fp        = NULL;
+  FILE                  *outputFile    = NULL;
   uint8_t               *pdecPelFrmInp = NULL;
   unit8_t               *pdecPelFrmOut = NULL;
   FILE                  *inputFile; /* Input YUV file pointer */
@@ -842,7 +842,7 @@ int main(int argc, char *argv[])
   }
   /* Allocate memory for frame level input buf */
   pdecPelFrmInp = malloc(sizeof(uint8_t) * sizeInBytes);
-  
+
   /* Allocate memory for frame level output buf */
   pdecPelFrmOut = malloc(sizeof(uint8_t) * sizeInBytes);
 
@@ -861,7 +861,7 @@ int main(int argc, char *argv[])
       {
         free(pdecPelFrmInp);
       }
-	  if (NULL != pdecPelFrmOut)
+      if (NULL != pdecPelFrmOut)
       {
         free(pdecPelFrmOut);
       }
@@ -898,7 +898,7 @@ int main(int argc, char *argv[])
           break;
         }
         fgcCTx.inpBufY = pdecPelFrmInp;
-		fgcCTx.outBufY = pdecPelFrmOut;
+        fgcCTx.outBufY = pdecPelFrmOut;
         if (fgcCTx.bitDepth > 8)
         {
           fgcCTx.inpBufU =
@@ -906,8 +906,8 @@ int main(int argc, char *argv[])
           fgcCTx.inpBufV =
             (void *) ((uint16_t *) fgcCTx.inpBufU
                       + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
-					  
-		  fgcCTx.outBufU =
+
+          fgcCTx.outBufU =
             (void *) ((uint16_t *) pdecPelFrmOut + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
           fgcCTx.outBufV =
             (void *) ((uint16_t *) fgcCTx.outBufU
@@ -915,12 +915,14 @@ int main(int argc, char *argv[])
         }
         else
         {
-          fgcCTx.inpBufU = (void *) ((uint8_t *) pdecPelFrmInp + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
+          fgcCTx.inpBufU =
+            (void *) ((uint8_t *) pdecPelFrmInp + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
           fgcCTx.inpBufV =
             (void *) ((uint8_t *) fgcCTx.inpBufU
                       + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
-					  
-		  fgcCTx.outBufU = (void *) ((uint8_t *) pdecPelFrmOut + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
+
+          fgcCTx.outBufU =
+            (void *) ((uint8_t *) pdecPelFrmOut + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
           fgcCTx.outBufV =
             (void *) ((uint8_t *) fgcCTx.outBufU
                       + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
@@ -928,8 +930,8 @@ int main(int argc, char *argv[])
         fgcCTx.inpStrideY = psFgsAppParams->frameWidth;
         fgcCTx.inpStrideU = (psFgsAppParams->frameWidth >> width_shift);
         fgcCTx.inpStrideV = (psFgsAppParams->frameWidth >> width_shift);
-		
-		fgcCTx.outStrideY = psFgsAppParams->frameWidth;
+
+        fgcCTx.outStrideY = psFgsAppParams->frameWidth;
         fgcCTx.outStrideU = (psFgsAppParams->frameWidth >> width_shift);
         fgcCTx.outStrideV = (psFgsAppParams->frameWidth >> width_shift);
 
@@ -960,7 +962,7 @@ int main(int argc, char *argv[])
       {
         free(pdecPelFrmInp);
       }
-	  if (NULL != pdecPelFrmOut)
+      if (NULL != pdecPelFrmOut)
       {
         free(pdecPelFrmOut);
       }

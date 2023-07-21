@@ -587,7 +587,7 @@ uint8_t validate_film_grain_parameters(uint32_t width, uint32_t height, uint8_t 
   }
   if (chroma_format_idc > MAX_CHROMA_FORMAT_IDC)
   {
-    return FGS_INVALID_CHROMA_FORMAT; /* Chroma format not supported */
+    return FGS_INVALID_CHROMA_FORMAT;             /* Chroma format not supported */
   }
   if (chroma_format_idc == MIN_CHROMA_FORMAT_IDC) /* Mono Chrome */
   {
@@ -659,7 +659,7 @@ uint8_t validate_film_grain_parameters(uint32_t width, uint32_t height, uint8_t 
              multiGrainCtr <= psFgcParam->intensityIntervalUpperBound[compCtr][intensityCtr]; multiGrainCtr++)
         {
           grainSynt->intensityInterval[compCtr][multiGrainCtr] = intensityCtr;
-          if (multiGrainCheck[compCtr][multiGrainCtr]) /* Non over lap */
+          if (multiGrainCheck[compCtr][multiGrainCtr])    /* Non over lap */
           {
             return FGS_INVALID_INTENSITY_BOUNDARY_VALUES; /* Not supported  */
           }
@@ -749,7 +749,7 @@ uint8_t validate_film_grain_parameters(uint32_t width, uint32_t height, uint8_t 
   {
     return FGS_INVALID_FGC_REPETETION_PERIOD; /* Not supported  */
   }
-  return FGS_SUCCESS; /* Success */
+  return FGS_SUCCESS;                         /* Success */
 }
 
 uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
@@ -760,7 +760,7 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
   uint8_t               bitDepth; /*grain bit depth and decoded bit depth are assumed to be same */
   uint32_t              widthComp[FGS_MAX_NUM_COMP], heightComp[FGS_MAX_NUM_COMP], strideComp[FGS_MAX_NUM_COMP];
   uint32_t              outStrideComp[FGS_MAX_NUM_COMP];
-  uint16_t             *decSampleHbdBlk16, *decSampleHbdBlk8, *decSampleHbdOffsetY,*outSampleHbdOffsetY;
+  uint16_t             *decSampleHbdBlk16, *decSampleHbdBlk8, *decSampleHbdOffsetY, *outSampleHbdOffsetY;
   uint16_t             *decHbdComp[FGS_MAX_NUM_COMP], *outHbdComp[FGS_MAX_NUM_COMP], numSamples;
   GrainSynthesisStruct *grainSynt = (GrainSynthesisStruct *) (inArgs->grainSynt);
   int32_t               scaleFactor;
@@ -778,7 +778,7 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
   uint32_t  height_forloop;
   uint32_t *offsetArr;
 #ifndef WINDOWS
-  uint32_t  pref_idx;
+  uint32_t pref_idx;
 #endif
 
   FilmGrainCharacteristicsStruct *fgcParams = &inArgs->fgcParams;
@@ -791,7 +791,7 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
   {
     decHbdComp[compCtr]    = (uint16_t *) inArgs->decComp[compCtr];
     strideComp[compCtr]    = inArgs->strideComp[compCtr];
-	outHbdComp[compCtr]    = (uint16_t *) inArgs->outComp[compCtr];
+    outHbdComp[compCtr]    = (uint16_t *) inArgs->outComp[compCtr];
     outStrideComp[compCtr] = inArgs->outStrideComp[compCtr];
     widthComp[compCtr]     = inArgs->widthComp[compCtr];
     heightComp[compCtr]    = inArgs->heightComp[compCtr];
@@ -806,7 +806,7 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
       if (1 == fgcParams->compModelPresentFlag[compCtr])
       {
         decSampleHbdOffsetY = decHbdComp[compCtr];
-		outSampleHbdOffsetY = outHbdComp[compCtr];
+        outSampleHbdOffsetY = outHbdComp[compCtr];
 
         width_forloop  = widthComp[compCtr] - (widthComp[compCtr] & 0xF);
         height_forloop = heightComp[compCtr] - (heightComp[compCtr] & 0xF);
@@ -939,9 +939,9 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
           /* Blending of size 16xwidth*/
 
           blend_stripe_10bit(decSampleHbdOffsetY, outSampleHbdOffsetY, grainStripe, widthComp[compCtr],
- 		                     strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
+                             strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
           decSampleHbdOffsetY += BLK_16 * strideComp[compCtr];
-		  outSampleHbdOffsetY += BLK_16 * outStrideComp[compCtr];
+          outSampleHbdOffsetY += BLK_16 * outStrideComp[compCtr];
 
         } /* end of component loop */
 
@@ -1069,10 +1069,10 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
           /* Blending of size 16xwidth*/
 
           blend_stripe_10bit(decSampleHbdOffsetY, outSampleHbdOffsetY, grainStripe, widthComp[compCtr],
-		                     strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth,
+                             strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth,
                              MIN(BLK_16, (heightComp[compCtr] - y)), bitDepth);
           decSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * strideComp[compCtr];
-		  outSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
+          outSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
         } /* end of component loop */
       }
     }
@@ -1114,12 +1114,12 @@ uint32_t fgs_simulation_blending_10bit_16x16(fgsProcessArgs *inArgs)
 
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    decHbdComp[compCtr] = (uint16_t *) inArgs->decComp[compCtr];
-    strideComp[compCtr] = inArgs->strideComp[compCtr];
-	outHbdComp[compCtr]    = (uint16_t *) inArgs->outComp[compCtr];
+    decHbdComp[compCtr]    = (uint16_t *) inArgs->decComp[compCtr];
+    strideComp[compCtr]    = inArgs->strideComp[compCtr];
+    outHbdComp[compCtr]    = (uint16_t *) inArgs->outComp[compCtr];
     outStrideComp[compCtr] = inArgs->outStrideComp[compCtr];
-    widthComp[compCtr]  = inArgs->widthComp[compCtr];
-    heightComp[compCtr] = inArgs->heightComp[compCtr];
+    widthComp[compCtr]     = inArgs->widthComp[compCtr];
+    heightComp[compCtr]    = inArgs->heightComp[compCtr];
   }
 
   grainStripe = (int16_t *) inArgs->scratchMem;
@@ -1131,7 +1131,7 @@ uint32_t fgs_simulation_blending_10bit_16x16(fgsProcessArgs *inArgs)
       if (1 == fgcParams->compModelPresentFlag[compCtr])
       {
         decSampleHbdOffsetY = decHbdComp[compCtr];
-		outSampleHbdOffsetY = outHbdComp[compCtr];
+        outSampleHbdOffsetY = outHbdComp[compCtr];
         width_forloop       = widthComp[compCtr] - (widthComp[compCtr] & 0xF);
         height_forloop      = heightComp[compCtr] - (heightComp[compCtr] & 0xF);
         offsetArr           = inArgs->fgsOffsets[compCtr];
@@ -1232,10 +1232,10 @@ uint32_t fgs_simulation_blending_10bit_16x16(fgsProcessArgs *inArgs)
 
           /* Blending of size 16xwidth*/
 
-          blend_stripe_10bit(decSampleHbdOffsetY, outSampleHbdOffsetY, grainStripe, widthComp[compCtr], 
-		                     strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
+          blend_stripe_10bit(decSampleHbdOffsetY, outSampleHbdOffsetY, grainStripe, widthComp[compCtr],
+                             strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
           decSampleHbdOffsetY += BLK_16 * strideComp[compCtr];
-		  outSampleHbdOffsetY += BLK_16 * outStrideComp[compCtr];
+          outSampleHbdOffsetY += BLK_16 * outStrideComp[compCtr];
 
         } /* end of component loop */
 
@@ -1282,7 +1282,7 @@ uint32_t fgs_simulation_blending_10bit_16x16(fgsProcessArgs *inArgs)
 
                 } /* only if average falls in any interval */
               }
-            } /* 8x8 level block processing */
+            }     /* 8x8 level block processing */
 
             /* uppdate the PRNG once per 16x16 block of samples */
             offsetArr++;
@@ -1338,10 +1338,10 @@ uint32_t fgs_simulation_blending_10bit_16x16(fgsProcessArgs *inArgs)
 
           /* Blending of size 16xwidth*/
           blend_stripe_10bit(decSampleHbdOffsetY, outSampleHbdOffsetY, grainStripe, widthComp[compCtr],
-		                     strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth,
+                             strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth,
                              MIN(BLK_16, (heightComp[compCtr] - y)), bitDepth);
           decSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * strideComp[compCtr];
-		  outSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
+          outSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
         } /* end of component loop */
       }
     }
@@ -1376,9 +1376,9 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
   uint32_t  width_forloop;
   uint32_t  height_forloop;
 
-  uint32_t                        tmp;
+  uint32_t tmp;
 #ifndef WINDOWS
-  uint32_t                        pref_idx;
+  uint32_t pref_idx;
 #endif
   FilmGrainCharacteristicsStruct *fgcParameters = &inArgs->fgcParams;
 
@@ -1388,12 +1388,12 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
 
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    decComp[compCtr]    = (uint8_t *) inArgs->decComp[compCtr];
-    strideComp[compCtr] = inArgs->strideComp[compCtr];
-	outComp[compCtr]    = (uint8_t *) inArgs->outComp[compCtr];
+    decComp[compCtr]       = (uint8_t *) inArgs->decComp[compCtr];
+    strideComp[compCtr]    = inArgs->strideComp[compCtr];
+    outComp[compCtr]       = (uint8_t *) inArgs->outComp[compCtr];
     outStrideComp[compCtr] = inArgs->outStrideComp[compCtr];
-    widthComp[compCtr]  = inArgs->widthComp[compCtr];
-    heightComp[compCtr] = inArgs->heightComp[compCtr];
+    widthComp[compCtr]     = inArgs->widthComp[compCtr];
+    heightComp[compCtr]    = inArgs->heightComp[compCtr];
   }
   grainStripe = (int8_t *) inArgs->scratchMem;
 
@@ -1409,8 +1409,8 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
         grainStripeWidth = ((widthComp[compCtr] - 1) | 0xF) + 1; /* Make next muliptle of 16 */
 
         decSampleOffsetY = decComp[compCtr];
-		outSampleOffsetY = outComp[compCtr];
-		
+        outSampleOffsetY = outComp[compCtr];
+
         /* Loop of 16x16 blocks */
         for (y = 0; y < height_forloop; y += BLK_16)
         {
@@ -1539,10 +1539,10 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
           /* deblocking at the vertical edges of 8x8 at 16xwidth*/
           deblock_grain_stripe(grainStripe, widthComp[compCtr], grainStripeWidth, BLK_8, BLK_16);
 
-          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr],
-                    		strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
+          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr], strideComp[compCtr],
+                            outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
           decSampleOffsetY += BLK_16 * strideComp[compCtr];
-		  outSampleOffsetY += BLK_16 * outStrideComp[compCtr];
+          outSampleOffsetY += BLK_16 * outStrideComp[compCtr];
         } /* end of component loop */
 
         if (heightComp[compCtr] & 0xF)
@@ -1601,7 +1601,7 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
 
                 } /* only if average falls in any interval */
               }
-            } /* 8x8 level block processing */
+            }     /* 8x8 level block processing */
 
             /* uppdate the PRNG once per 16x16 block of samples */
             offsetArr++;
@@ -1669,11 +1669,10 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
           /* deblocking at the vertical edges of 8x8 at 16xwidth*/
           deblock_grain_stripe(grainStripe, widthComp[compCtr], grainStripeWidth, BLK_8, BLK_16);
 
-          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr], 
-		                    strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth,
-                            MIN(BLK_16, (heightComp[compCtr] - y)), bitDepth);
+          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr], strideComp[compCtr],
+                            outStrideComp[compCtr], grainStripeWidth, MIN(BLK_16, (heightComp[compCtr] - y)), bitDepth);
           decSampleOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * strideComp[compCtr];
-		  outSampleOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
+          outSampleOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
 
         } /* end of component loop */
       }
@@ -1683,7 +1682,7 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
 }
 
 uint32_t fgs_simulation_blending_8bit_16x16(
-  fgsProcessArgs *inArgs) /* GrainCharacteristicApi fgsParamStruct,void *psFgsHandle) */
+  fgsProcessArgs *inArgs)                 /* GrainCharacteristicApi fgsParamStruct,void *psFgsHandle) */
 {
   uint8_t               numComp, compCtr; /* number of color components */
   uint8_t               log2ScaleFactor;
@@ -1691,9 +1690,9 @@ uint32_t fgs_simulation_blending_8bit_16x16(
   uint8_t               bitDepth; /*grain bit depth and decoded bit depth are assumed to be same */
   uint32_t              widthComp[FGS_MAX_NUM_COMP], heightComp[FGS_MAX_NUM_COMP], strideComp[FGS_MAX_NUM_COMP];
   uint32_t              strideComp[FGS_MAX_NUM_COMP];
-  uint8_t              *decSampleBlk16, /**decSampleBlk8,*/ *decSampleOffsetY,*outSampleOffsetY;
+  uint8_t              *decSampleBlk16, /**decSampleBlk8,*/ *decSampleOffsetY, *outSampleOffsetY;
   uint16_t              numSamples;
-  uint8_t              *decComp[FGS_MAX_NUM_COMP],*outComp[FGS_MAX_NUM_COMP];
+  uint8_t              *decComp[FGS_MAX_NUM_COMP], *outComp[FGS_MAX_NUM_COMP];
   GrainSynthesisStruct *grainSynt = (GrainSynthesisStruct *) (inArgs->grainSynt);
   int32_t               scaleFactor;
   uint32_t              kOffset, lOffset, grainStripeOffset; /*,grainStripeOffsetBlk8,offsetBlk8x8;*/
@@ -1717,12 +1716,12 @@ uint32_t fgs_simulation_blending_8bit_16x16(
 
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    decComp[compCtr]    = (uint8_t *) inArgs->decComp[compCtr];
-    strideComp[compCtr] = inArgs->strideComp[compCtr];
-	outComp[compCtr]    = (uint8_t *) inArgs->outComp[compCtr];
+    decComp[compCtr]       = (uint8_t *) inArgs->decComp[compCtr];
+    strideComp[compCtr]    = inArgs->strideComp[compCtr];
+    outComp[compCtr]       = (uint8_t *) inArgs->outComp[compCtr];
     outStrideComp[compCtr] = inArgs->outStrideComp[compCtr];
-    heightComp[compCtr] = inArgs->heightComp[compCtr];
-    widthComp[compCtr]  = inArgs->widthComp[compCtr];
+    heightComp[compCtr]    = inArgs->heightComp[compCtr];
+    widthComp[compCtr]     = inArgs->widthComp[compCtr];
   }
   grainStripe = (int8_t *) inArgs->scratchMem;
 
@@ -1735,7 +1734,7 @@ uint32_t fgs_simulation_blending_8bit_16x16(
         offsetArr = inArgs->fgsOffsets[compCtr];
 
         decSampleOffsetY = decComp[compCtr];
-		outSampleOffsetY = outComp[compCtr];
+        outSampleOffsetY = outComp[compCtr];
         width_forloop    = widthComp[compCtr] - (widthComp[compCtr] & 0xF);
         height_forloop   = heightComp[compCtr] - (heightComp[compCtr] & 0xF);
         grainStripeWidth = ((widthComp[compCtr] - 1) | 0xF) + 1; /* Make next muliptle of 16*/
@@ -1835,10 +1834,10 @@ uint32_t fgs_simulation_blending_8bit_16x16(
           /* deblocking at the vertical edges of 8x8 at 16xwidth*/
           deblock_grain_stripe(grainStripe, widthComp[compCtr], grainStripeWidth, BLK_16, BLK_16);
 
-          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr], 
-		                    strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
+          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr], strideComp[compCtr],
+                            outStrideComp[compCtr], grainStripeWidth, BLK_16, bitDepth);
           decSampleOffsetY += BLK_16 * strideComp[compCtr];
-		  outSampleOffsetY += BLK_16 * outStrideComp[compCtr];
+          outSampleOffsetY += BLK_16 * outStrideComp[compCtr];
         } /* end of component loop */
 
         if ((heightComp[compCtr] & 0xF))
@@ -1883,7 +1882,7 @@ uint32_t fgs_simulation_blending_8bit_16x16(
 
                 } /* only if average falls in any interval */
               }
-            } /* 8x8 level block processing */
+            }     /* 8x8 level block processing */
 
             /* uppdate the PRNG once per 16x16 block of samples */
             offsetArr++;
@@ -1936,11 +1935,10 @@ uint32_t fgs_simulation_blending_8bit_16x16(
           /* deblocking at the vertical edges of 8x8 at 16xwidth*/
           deblock_grain_stripe(grainStripe, widthComp[compCtr], grainStripeWidth, BLK_16, BLK_16);
 
-          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr],
-		                    strideComp[compCtr], outStrideComp[compCtr], grainStripeWidth,
-                            MIN(BLK_16, (heightComp[compCtr] - y)), bitDepth);
+          blend_stripe_8bit(decSampleOffsetY, outSampleOffsetY, grainStripe, widthComp[compCtr], strideComp[compCtr],
+                            outStrideComp[compCtr], grainStripeWidth, MIN(BLK_16, (heightComp[compCtr] - y)), bitDepth);
           decSampleOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * strideComp[compCtr];
-		  outSampleOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
+          outSampleOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
 
         } /* end of component loop */
       }
@@ -2013,17 +2011,18 @@ void *workerThread(threadCntxt *args)
 
 uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
 {
-  fgsHandle            *psFgsHandle = (fgsHandle *) handle;
-  uint8_t               numComp     = FGS_MAX_NUM_COMP, compCtr;
-  uint8_t               bitDepth; /*grain bit depth and decoded bit depth are assumed to be same */
-  uint8_t               colorOffset[FGS_MAX_NUM_COMP];
-  uint32_t              widthComp[FGS_MAX_NUM_COMP], heightComp[FGS_MAX_NUM_COMP], strideComp[FGS_MAX_NUM_COMP], outStrideComp[FGS_MAX_NUM_COMP];
+  fgsHandle *psFgsHandle = (fgsHandle *) handle;
+  uint8_t    numComp     = FGS_MAX_NUM_COMP, compCtr;
+  uint8_t    bitDepth; /*grain bit depth and decoded bit depth are assumed to be same */
+  uint8_t    colorOffset[FGS_MAX_NUM_COMP];
+  uint32_t   widthComp[FGS_MAX_NUM_COMP], heightComp[FGS_MAX_NUM_COMP], strideComp[FGS_MAX_NUM_COMP],
+    outStrideComp[FGS_MAX_NUM_COMP];
   uint8_t              *decComp[FGS_MAX_NUM_COMP];
   uint8_t              *outComp[FGS_MAX_NUM_COMP];
   GrainSynthesisStruct *grainSynt = (GrainSynthesisStruct *) (&psFgsHandle->grainSynt);
   uint32_t              picOffset;
-  uint32_t pseudoRandValEc;
-  uint32_t errorCode;
+  uint32_t              pseudoRandValEc;
+  uint32_t              errorCode;
 
   int32_t numBlks_x[FGS_MAX_NUM_COMP];
   int32_t numBlks_y[FGS_MAX_NUM_COMP];
@@ -2095,7 +2094,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
   decComp[0] = (uint8_t *) fgsParamStruct.inpBufY;
   decComp[1] = (uint8_t *) fgsParamStruct.inpBufU;
   decComp[2] = (uint8_t *) fgsParamStruct.inpBufV;
-  
+
   outComp[0] = (uint8_t *) fgsParamStruct.outBufY;
   outComp[1] = (uint8_t *) fgsParamStruct.outBufU;
   outComp[2] = (uint8_t *) fgsParamStruct.outBufV;
@@ -2104,7 +2103,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
   strideComp[0] = fgsParamStruct.inpStrideY;
   strideComp[1] = fgsParamStruct.inpStrideU;
   strideComp[2] = fgsParamStruct.inpStrideV;
-  
+
   /* component strides */
   outStrideComp[0] = fgsParamStruct.outStrideY;
   outStrideComp[1] = fgsParamStruct.outStrideU;
@@ -2158,16 +2157,17 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
       offsetArr[compCtr] = psFgsHandle->offsetArr[compCtr];
       if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
       {
-        args->fgsArgs.widthComp[compCtr]  = widthComp[compCtr];
-        args->fgsArgs.strideComp[compCtr] = strideComp[compCtr];
-		args->fgsArgs.outStrideComp[compCtr] = outStrideComp[compCtr];
-        args->fgsArgs.fgsOffsets[compCtr] = offsetArr[compCtr] + z * numSripesPerThr[compCtr] * numBlks_x[compCtr];
+        args->fgsArgs.widthComp[compCtr]     = widthComp[compCtr];
+        args->fgsArgs.strideComp[compCtr]    = strideComp[compCtr];
+        args->fgsArgs.outStrideComp[compCtr] = outStrideComp[compCtr];
+        args->fgsArgs.fgsOffsets[compCtr]    = offsetArr[compCtr] + z * numSripesPerThr[compCtr] * numBlks_x[compCtr];
 
         args->fgsArgs.decComp[compCtr] =
           (void *) (decComp[compCtr] + offset_dec_bufs * z * numSripesPerThr[compCtr] * BLK_16 * strideComp[compCtr]);
-		  
-		args->fgsArgs.outComp[compCtr] =
-          (void *) (outComp[compCtr] + offset_dec_bufs * z * numSripesPerThr[compCtr] * BLK_16 * outStrideComp[compCtr]);
+
+        args->fgsArgs.outComp[compCtr] =
+          (void *) (outComp[compCtr]
+                    + offset_dec_bufs * z * numSripesPerThr[compCtr] * BLK_16 * outStrideComp[compCtr]);
 
         args->fgsArgs.heightComp[compCtr] = numSripesPerThr[compCtr] * BLK_16;
       }

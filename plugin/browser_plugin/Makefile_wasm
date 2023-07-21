@@ -39,7 +39,7 @@ TARGET=fgs-module.js
 
 TESTTARGET=testfgs
 
-DEPS=$(SRCS) Makefile
+DEPS=$(SRCS) Makefile_wasm
 
 all: $(TARGET)
 
