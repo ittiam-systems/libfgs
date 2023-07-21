@@ -25,13 +25,9 @@ LIBNAME=lib$(LIB).a
 
 TARGET=fgs-module.js
 
-TESTTARGET=testfgs
-
 DEPS=$(SRCS) Makefile_wasm
 
 all: $(TARGET)
-
-test: $(TESTTARGET)
 
 $(TARGET): $(DEPS)
 		emcc -o $@ -O3 -s WASM=1 \
@@ -51,29 +47,6 @@ $(TARGET): $(DEPS)
 									   ]" \
 				$(SRCS) $(SINC) -L. -l$(LIB) -pthread
 
-$(TESTTARGET): test.c $(DEPS) $(X64LIBAV1)
-		#cc -o $@ -O3 test.c $(SRCS) $(INC) -L $(X64LIBDIR) -l$(LIB)
-		emcc -o $@ -O3 test.c $(SRCS) $(INC) -L $(X64LIBDIR) -l$(LIB)
-
-$(TESTTARGET)g: test.c $(DEPS) $(X64LIBAV1)
-		#cc -o $@ -g test.c $(SRCS) $(INC) -L $(X64LIBDIR) -l$(LIB)
-		emcc -o $@ -g test.c $(SRCS) $(SINC) -L $(X64LIBDIR) -l$(LIB)
-
 clean:
-		-rm $(TARGET) $(TESTTARGET) $(TESTTARGET)g
+		-rm $(TARGET)
 
-$(EMLIBAV1): $(LIBDIR)
-		(cd $(LIBDIR); \
-			cmake  `pwd | sed 's?$(LIBDIR)?$(AOMDIR)?'` \
-		        -DENABLE_CCACHE=1 \
-		        -DAOM_TARGET_CPU=generic \
-		        -DENABLE_DOCS=0 \
-		        -DCONFIG_ACCOUNTING=1 \
-		        -DCONFIG_INSPECTION=1 \
-		        -DCONFIG_MULTITHREAD=0 \
-		        -DCONFIG_RUNTIME_CPU_DETECT=0 \
-		        -DCONFIG_UNIT_TESTS=0 \
-		        -DCONFIG_WEBM_IO=0 \
-		        -DCMAKE_TOOLCHAIN_FILE=`../../get-emcmake.sh`; \
-			make \
-		)
