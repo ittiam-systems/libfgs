@@ -1,117 +1,29 @@
 
-TARGETOS?=windows
-
-ifeq "$(TARGETOS)" "Windows_NT"
-TARGETOS=windows
-endif
-
-
-ARCH?=x86
-CFG?=release
-LOGO_EN?=no
-
-
-
-ifndef EXTRA_CFLAGS
-EXTRA_CFLAGS=
-endif
-
-
-OBJCOPY=objcopy
-LD=llvm-ld
-#EMAR=F:\utils\emsdk\emsdk-main\upstream\bin\llvm-ar.exe
 EMAR=emar
-ifeq "$(GPP)"  "yes"
-CC=em++
-CXX=em++
-TOOLPREFIX = gpp
-else
+
 CC=emcc
 CXX=emcc
 TOOLPREFIX = emcc
-endif
-AR=ar
-LDFLAGS = 
 
-ARFLAGS=rus
-
-ifneq "$(TARGETOS)" "windows"
-CFLAGS += -fPIC
-else
-TOOLPREFIX = mingw
-endif
-
-
-ifeq "$(TARGETOS)" "windows"
-OSEXT = 
-else
-OSEXT = $(TARGETOS).
-endif
-
-CFLAGS+=  -ftree-vectorize -Wno-unused-variable -DKEEP_THREADS_ACTIVE
-CFLAGS+=  -D_LIB -Wall  
-
-ifeq "$(CFG)"  "release"
-CFLAGS+=-O3
-BUILD=rel
-else
-ifeq "$(CFG)"  "debug"
-CFLAGS+=-g -O0 
-BUILD=dbg
-endif
-endif
-
-ifeq "$(ARCH)"  "x86"
-CFLAGS += -m32
-CFLAGS += -UENABLE_AVX2
-AVX2 = no
-else
-CFLAGS += -m64
-endif
-
-TARGETEXTN=$(BUILD)_$(TOOLPREFIX)_$(OSEXT)$(ARCH).a
-OBJEXTN=$(BUILD).$(TOOLPREFIX).$(OSEXT)$(ARCH).o
+TARGETEXTN=$(TOOLPREFIX).a
+OBJEXTN=$(TOOLPREFIX).o
 
 TARGET=libfgs_$(TARGETEXTN)
 
-INCLUDES+=-I../fgs/include/
-INCLUDES+=-I../fgs/api
-INCLUDES+=-I../libthread/include/
-# INCLUDES+=-I../../../../common/include/private/
-# INCLUDES+=-I../../../../common/include/export/
-# INCLUDES+=-I../../../../common/include/import/
-# INCLUDES+=-I../../include/private
+INCLUDES+=-I../../fgs/include/
+INCLUDES+=-I../../fgs/api
+INCLUDES+=-I../../libthread/include/
 
-# INCLUDES+=-I../../../../../../concealment/common/include/export/
-# INCLUDES+=-I../../../../../../concealment/common/include/import/
-# INCLUDES+=-I../../../../../../concealment/common/include/private/
-
-CFLAGS += -DX86_MINGW
 CFLAGS += -DWIN32 
 CFLAGS += -D_DEBUG -D_MBCS -D_LIB 
-CFLAGS += -UDEBUG_DEC 
 
-ifeq "$(LOGO_EN)"  "yes" 
-CFLAGS += -DLOGO_EN
-else
-CFLAGS += -ULOGO_EN
-endif
-
-SRCS += ../libthread/src/ithread.c
-SRCS += ../fgs/src/grain_simulation_modules.c
-
-SRCS += ../fgs/src/grain_simulation_api.c
-
-CFLAGS+=-DDEFAULT_ARCH=D_ARCH_X86_SSE42
+SRCS += ../../libthread/src/ithread.c
+SRCS += ../../fgs/src/grain_simulation_modules.c
+SRCS += ../../fgs/src/grain_simulation_api.c
 
 #warn about declarations after statements
-ifneq "$(GPP)"  "yes"
 CFLAGS += -Wdeclaration-after-statement 
-endif
-
-CFLAGS += $(INCLUDES) -DAVC_FGS_SUPPORT
-CFLAGS += $(EXTRA_CFLAGS) -pthread
-
+CFLAGS += $(INCLUDES) -pthread
 
 OBJS  = $(SRCS:.c=.$(OBJEXTN))
 
@@ -123,12 +35,8 @@ $(OBJS): %.$(OBJEXTN): %.c
 
 
 $(TARGET):  $(OBJS) $(LIBS)
-	$(EMAR) rc $@ $(OBJS) 
-	#$(LD) -o $@ $(OBJS) -r $(LDFLAGS)
-	#$(OBJCOPY) $(OBJCOPYFLAGS) -w --localize-symbol=*  $@ $@
-
-	cp $(TARGET) ../lib
+	$(EMAR) rc $@ $(OBJS)
 
 .PHONY: clean
 clean:
-	-rm -f $(OBJS) $(TARGET) $(C_OBJS_SSSE3) $(C_OBJS_SSE42) $(C_OBJS_AVX2)
+	-rm -f $(OBJS) $(TARGET)

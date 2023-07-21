@@ -15,11 +15,7 @@
 #
 SRCS=fgs-module.c
 
-LIBDIR=.
-
-SINC=-I $(LIBDIR)
-
-LIB=fgs_rel_mingw_x86
+LIB=fgs_emcc
 
 LIBNAME=lib$(LIB).a
 
@@ -31,21 +27,21 @@ all: $(TARGET)
 
 $(TARGET): $(DEPS)
 		emcc -o $@ -O3 -s WASM=1 \
-				-s ALLOW_MEMORY_GROWTH=1 \
-				-s PTHREAD_POOL_SIZE=4 \
-				-s MODULARIZE \
-				-s EXPORT_NAME=Create_fgs_module \
-				-s "EXPORTED_FUNCTIONS=['_create_fgs', \
-										'_FGS_process', \
-										'_get_outBufY', \
-										'_get_outBufU', \
-										'_get_outBufV', \
-										'_get_inpBufY', \
-										'_get_inpBufU', \
-										'_get_inpBufV', \
-										'_FGS_delete' \
-									   ]" \
-				$(SRCS) $(SINC) -L. -l$(LIB) -pthread
+		-s ALLOW_MEMORY_GROWTH=1 \
+		-s PTHREAD_POOL_SIZE=4 \
+		-s MODULARIZE \
+		-s EXPORT_NAME=Create_fgs_module \
+		-s "EXPORTED_FUNCTIONS=['_create_fgs', \
+		'_FGS_process', \
+		'_get_outBufY', \
+		'_get_outBufU', \
+		'_get_outBufV', \
+		'_get_inpBufY', \
+		'_get_inpBufU', \
+		'_get_inpBufV', \
+		'_FGS_delete' \
+		]" \
+		$(SRCS) -L. -l$(LIB) -pthread
 
 clean:
 		-rm $(TARGET)
