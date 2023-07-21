@@ -15,25 +15,13 @@
 #
 SRCS=fgs-module.c
 
-
 LIBDIR=.
-
-IMPORT=.
-PRIVATE=.
-
-INC=-I $(IMPORT) -I $(PRIVATE)
 
 SINC=-I $(LIBDIR)
 
-X64LIBDIR=.
-
-#LIB=ih264dec_rel_mingw_x64
 LIB=fgs_rel_mingw_x86
 
 LIBNAME=lib$(LIB).a
-
-
-# PATHLIBAV1=$(X64LIBDIR)/libih264dec_rel_mingw_x64.a
 
 TARGET=fgs-module.js
 
@@ -89,12 +77,3 @@ $(EMLIBAV1): $(LIBDIR)
 		        -DCMAKE_TOOLCHAIN_FILE=`../../get-emcmake.sh`; \
 			make \
 		)
-
-$(X86LIBAV1): $(X86LIBDIR)
-		(cd $(X86LIBDIR); cmake  `pwd | sed 's?$(X86LIBDIR)?$(AOMDIR)?'`; make)
-
-$(LIBDIR):
-		mkdir $(LIBDIR)
-
-$(X86LIBDIR):
-		mkdir $(X86LIBDIR)
