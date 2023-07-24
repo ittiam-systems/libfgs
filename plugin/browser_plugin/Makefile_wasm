@@ -1,0 +1,33 @@
+SRCS=fgs-module.c
+
+LIB=fgs_emcc
+
+LIBNAME=lib$(LIB).a
+
+TARGET=fgs-module.js
+
+DEPS=$(SRCS) Makefile_wasm
+
+all: $(TARGET)
+
+$(TARGET): $(DEPS)
+		emcc -o $@ -O3 -s WASM=1 \
+		-s ALLOW_MEMORY_GROWTH=1 \
+		-s PTHREAD_POOL_SIZE=4 \
+		-s MODULARIZE \
+		-s EXPORT_NAME=Create_fgs_module \
+		-s "EXPORTED_FUNCTIONS=['_create_fgs', \
+		'_FGS_process', \
+		'_get_outBufY', \
+		'_get_outBufU', \
+		'_get_outBufV', \
+		'_get_inpBufY', \
+		'_get_inpBufU', \
+		'_get_inpBufV', \
+		'_FGS_delete' \
+		]" \
+		$(SRCS) -L. -l$(LIB) -pthread
+
+clean:
+		-rm $(TARGET)
+
