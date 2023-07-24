@@ -1355,7 +1355,7 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
   uint8_t               log2ScaleFactor;
   uint32_t              h, v;
   uint8_t               bitDepth; /*grain bit depth and decoded bit depth are assumed to be same */
-  uint8_t              *decSampleBlk16, *decSampleBlk8, *decSampleOffsetY, outSampleOffsetY;
+  uint8_t              *decSampleBlk16, *decSampleBlk8, *decSampleOffsetY, *outSampleOffsetY;
   uint32_t              widthComp[FGS_MAX_NUM_COMP], heightComp[FGS_MAX_NUM_COMP], strideComp[FGS_MAX_NUM_COMP];
   uint32_t              outStrideComp[FGS_MAX_NUM_COMP];
   uint16_t              numSamples;
@@ -1689,7 +1689,7 @@ uint32_t fgs_simulation_blending_8bit_16x16(
   uint32_t              h, v;
   uint8_t               bitDepth; /*grain bit depth and decoded bit depth are assumed to be same */
   uint32_t              widthComp[FGS_MAX_NUM_COMP], heightComp[FGS_MAX_NUM_COMP], strideComp[FGS_MAX_NUM_COMP];
-  uint32_t              strideComp[FGS_MAX_NUM_COMP];
+  uint32_t              outStrideComp[FGS_MAX_NUM_COMP];
   uint8_t              *decSampleBlk16, /**decSampleBlk8,*/ *decSampleOffsetY, *outSampleOffsetY;
   uint16_t              numSamples;
   uint8_t              *decComp[FGS_MAX_NUM_COMP], *outComp[FGS_MAX_NUM_COMP];
