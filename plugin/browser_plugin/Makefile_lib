@@ -1,0 +1,42 @@
+
+EMAR=emar
+
+CC=emcc
+CXX=emcc
+TOOLPREFIX = emcc
+
+TARGETEXTN=$(TOOLPREFIX).a
+OBJEXTN=$(TOOLPREFIX).o
+
+TARGET=libfgs_$(TARGETEXTN)
+
+INCLUDES+=-I../../fgs/include/
+INCLUDES+=-I../../fgs/api
+INCLUDES+=-I../../libthread/include/
+
+CFLAGS += -DWIN32 
+CFLAGS += -D_DEBUG -D_MBCS -D_LIB 
+
+SRCS += ../../libthread/src/ithread.c
+SRCS += ../../fgs/src/grain_simulation_modules.c
+SRCS += ../../fgs/src/grain_simulation_api.c
+
+#warn about declarations after statements
+CFLAGS += -Wdeclaration-after-statement 
+CFLAGS += $(INCLUDES) -pthread
+
+OBJS  = $(SRCS:.c=.$(OBJEXTN))
+
+.PHONY: all
+all: $(TARGET)
+
+$(OBJS): %.$(OBJEXTN): %.c 
+	$(CC) -c $(CFLAGS) $*.c -o $*.$(OBJEXTN)
+
+
+$(TARGET):  $(OBJS) $(LIBS)
+	$(EMAR) rc $@ $(OBJS)
+
+.PHONY: clean
+clean:
+	-rm -f $(OBJS) $(TARGET)
