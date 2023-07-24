@@ -110,12 +110,18 @@ typedef struct FilmGrainCharacteristicsStruct_t
 /* Structure holding the grain characteristics */
 typedef struct GrainCharacteristicApi_t
 {
-  /* decoder output samples */
-  void *decBufY;
-  /* decoder output samples */
-  void *decBufU;
-  /* decoder output samples */
-  void *decBufV;
+  /* Input samples Y */
+  void *inpBufY;
+  /* Input samples U */
+  void *inpBufU;
+  /* Input samples V */
+  void *inpBufV;
+  /* film grain blended output Y */
+  void *outBufY;
+  /* film grain blended output U */
+  void *outBufU;
+  /* film grain blended output V */
+  void *outBufV;
   /* width of the frame */
   uint32_t width;
   /* height of the frame */
@@ -123,11 +129,17 @@ typedef struct GrainCharacteristicApi_t
   /* 0 : monochrome; 1: 420; 2: 422; 3: 444 */
   uint8_t chromaFormat;
   /* Stride of input buffer Y */
-  uint32_t strideY;
+  uint32_t inpStrideY;
   /* Stride of input buffer U */
-  uint32_t strideU;
+  uint32_t inpStrideU;
   /* Stride of input buffer V */
-  uint32_t strideV;
+  uint32_t inpStrideV;
+  /* Stride of output buffer Y */
+  uint32_t outStrideY;
+  /* Stride of output buffer U */
+  uint32_t outStrideU;
+  /* Stride of output buffer V */
+  uint32_t outStrideV;
   /* 8,10,12,14 and 16 bits */
   uint8_t bitDepth;
   /* decoded frame picture order count */

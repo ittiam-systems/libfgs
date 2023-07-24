@@ -190,7 +190,7 @@ int32_t get_next_parameter_allow_spaces(char *line, uint32_t line_length, uint32
       data[i] = '\0';
       --i;
     }
-    i += 1; /* Set the character to next position */
+    i += 1;       /* Set the character to next position */
   }
   data[i] = '\0'; /* Suffix with NULL character */
   return 1;
@@ -723,11 +723,12 @@ int main(int argc, char *argv[])
 {
   int32_t                status = 0;
   size_t                 bytesRead;
-  size_t                 sizeInBytes = 0;
-  uint32_t               frameNum    = 0;
-  FILE                  *cur_fp      = NULL;
-  FILE                  *outputFile  = NULL;
-  uint8_t               *pdecPelFrm;
+  size_t                 sizeInBytes   = 0;
+  uint32_t               frameNum      = 0;
+  FILE                  *cur_fp        = NULL;
+  FILE                  *outputFile    = NULL;
+  uint8_t               *pdecPelFrmInp = NULL;
+  unit8_t               *pdecPelFrmOut = NULL;
   FILE                  *inputFile; /* Input YUV file pointer */
   void                  *psFgsHandle;
   fgs_app_params         sFgsAppParams  = { 0 };
@@ -839,8 +840,11 @@ int main(int argc, char *argv[])
     printf("Failed to open output yuv %s\n", psFgsAppParams->outputFile);
     return FAILURE_RET;
   }
-  /* Allocate memory for frame level buf */
-  pdecPelFrm = malloc(sizeof(uint8_t) * sizeInBytes);
+  /* Allocate memory for frame level input buf */
+  pdecPelFrmInp = malloc(sizeof(uint8_t) * sizeInBytes);
+
+  /* Allocate memory for frame level output buf */
+  pdecPelFrmOut = malloc(sizeof(uint8_t) * sizeInBytes);
 
   /* Start configuration file parsing, Exit on reaching the end of file */
   for (count = 0; count < psFgsAppParams->numProfiles; count++)
@@ -853,9 +857,13 @@ int main(int argc, char *argv[])
       fclose(inputFile);
       fclose(outputFile);
       fgs_delete(psFgsHandle);
-      if (NULL != pdecPelFrm)
+      if (NULL != pdecPelFrmInp)
       {
-        free(pdecPelFrm);
+        free(pdecPelFrmInp);
+      }
+      if (NULL != pdecPelFrmOut)
+      {
+        free(pdecPelFrmOut);
       }
       return FAILURE_RET;
     }
@@ -866,7 +874,7 @@ int main(int argc, char *argv[])
       {
         while ((frameNum < psFgsAppParams->startFrameNum) && (frameNum < psFgsAppParams->numFrames))
         {
-          bytesRead = fread(pdecPelFrm, sizeInBytes, sizeof(uint8_t), inputFile);
+          bytesRead = fread(pdecPelFrmInp, sizeInBytes, sizeof(uint8_t), inputFile);
           if (!bytesRead)
           {
             printf("Reached end of input file\n");
@@ -874,7 +882,7 @@ int main(int argc, char *argv[])
           }
           frameNum++;
 #if ENABLE_VIDEO_WRITE
-          fwrite(pdecPelFrm, sizeInBytes, sizeof(uint8_t), outputFile);
+          fwrite(pdecPelFrmInp, sizeInBytes, sizeof(uint8_t), outputFile);
 #endif
         }
       }
@@ -883,31 +891,49 @@ int main(int argc, char *argv[])
       {
         fgcCTx.poc      = frameNum % 256;
         fgcCTx.idrPicId = 0;
-        bytesRead       = fread(pdecPelFrm, sizeInBytes, sizeof(uint8_t), inputFile);
+        bytesRead       = fread(pdecPelFrmInp, sizeInBytes, sizeof(uint8_t), inputFile);
         if (!bytesRead)
         {
           printf("Reached end of input file\n");
           break;
         }
-        fgcCTx.decBufY = pdecPelFrm;
+        fgcCTx.inpBufY = pdecPelFrmInp;
+        fgcCTx.outBufY = pdecPelFrmOut;
         if (fgcCTx.bitDepth > 8)
         {
-          fgcCTx.decBufU =
-            (void *) ((uint16_t *) pdecPelFrm + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
-          fgcCTx.decBufV =
-            (void *) ((uint16_t *) fgcCTx.decBufU
+          fgcCTx.inpBufU =
+            (void *) ((uint16_t *) pdecPelFrmInp + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
+          fgcCTx.inpBufV =
+            (void *) ((uint16_t *) fgcCTx.inpBufU
+                      + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
+
+          fgcCTx.outBufU =
+            (void *) ((uint16_t *) pdecPelFrmOut + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
+          fgcCTx.outBufV =
+            (void *) ((uint16_t *) fgcCTx.outBufU
                       + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
         }
         else
         {
-          fgcCTx.decBufU = (void *) ((uint8_t *) pdecPelFrm + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
-          fgcCTx.decBufV =
-            (void *) ((uint8_t *) fgcCTx.decBufU
+          fgcCTx.inpBufU =
+            (void *) ((uint8_t *) pdecPelFrmInp + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
+          fgcCTx.inpBufV =
+            (void *) ((uint8_t *) fgcCTx.inpBufU
+                      + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
+
+          fgcCTx.outBufU =
+            (void *) ((uint8_t *) pdecPelFrmOut + psFgsAppParams->frameWidth * psFgsAppParams->frameHeight);
+          fgcCTx.outBufV =
+            (void *) ((uint8_t *) fgcCTx.outBufU
                       + (psFgsAppParams->frameWidth >> width_shift) * (psFgsAppParams->frameHeight >> height_shift));
         }
-        fgcCTx.strideY = psFgsAppParams->frameWidth;
-        fgcCTx.strideU = (psFgsAppParams->frameWidth >> width_shift);
-        fgcCTx.strideV = (psFgsAppParams->frameWidth >> width_shift);
+        fgcCTx.inpStrideY = psFgsAppParams->frameWidth;
+        fgcCTx.inpStrideU = (psFgsAppParams->frameWidth >> width_shift);
+        fgcCTx.inpStrideV = (psFgsAppParams->frameWidth >> width_shift);
+
+        fgcCTx.outStrideY = psFgsAppParams->frameWidth;
+        fgcCTx.outStrideU = (psFgsAppParams->frameWidth >> width_shift);
+        fgcCTx.outStrideV = (psFgsAppParams->frameWidth >> width_shift);
 
         fgcCTx.fgcParameters.blockSize = 8;
 
@@ -920,7 +946,7 @@ int main(int argc, char *argv[])
         }
         frameNum++;
 #if ENABLE_VIDEO_WRITE
-        fwrite(pdecPelFrm, sizeInBytes, sizeof(uint8_t), outputFile);
+        fwrite(pdecPelFrmOut, sizeInBytes, sizeof(uint8_t), outputFile);
 #endif
       } /* End of interface between App and Lib */
     }
@@ -932,9 +958,13 @@ int main(int argc, char *argv[])
       fclose(inputFile);
       fclose(outputFile);
       fgs_delete(psFgsHandle);
-      if (NULL != pdecPelFrm)
+      if (NULL != pdecPelFrmInp)
       {
-        free(pdecPelFrm);
+        free(pdecPelFrmInp);
+      }
+      if (NULL != pdecPelFrmOut)
+      {
+        free(pdecPelFrmOut);
       }
       return FAILURE_RET;
     }
@@ -942,7 +972,7 @@ int main(int argc, char *argv[])
 
   while ((frameNum < psFgsAppParams->numFrames))
   {
-    bytesRead = fread(pdecPelFrm, sizeInBytes, sizeof(uint8_t), inputFile);
+    bytesRead = fread(pdecPelFrmInp, sizeInBytes, sizeof(uint8_t), inputFile);
     if (!bytesRead)
     {
       printf("Reached end of input file\n");
@@ -950,7 +980,7 @@ int main(int argc, char *argv[])
     }
     frameNum++;
 #if ENABLE_VIDEO_WRITE
-    fwrite(pdecPelFrm, sizeInBytes, sizeof(uint8_t), outputFile);
+    fwrite(pdecPelFrmInp, sizeInBytes, sizeof(uint8_t), outputFile);
 #endif
   }
 
@@ -959,9 +989,9 @@ int main(int argc, char *argv[])
   fclose(inputFile);
   fclose(outputFile);
   fgs_delete(psFgsHandle);
-  if (NULL != pdecPelFrm)
+  if (NULL != pdecPelFrmInp)
   {
-    free(pdecPelFrm);
+    free(pdecPelFrmInp);
   }
 
   printf("Done executing Film Grain Synthesizer\n");

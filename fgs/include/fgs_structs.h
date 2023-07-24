@@ -113,9 +113,11 @@ typedef struct fgsProcessArgs
   uint8_t                        numComp;
   uint32_t                      *fgsOffsets[FGS_MAX_NUM_COMP];
   void                          *decComp[FGS_MAX_NUM_COMP];
+  void                          *outComp[FGS_MAX_NUM_COMP];
   uint32_t                       widthComp[FGS_MAX_NUM_COMP];
   uint32_t                       heightComp[FGS_MAX_NUM_COMP];
   uint32_t                       strideComp[FGS_MAX_NUM_COMP];
+  uint32_t                       outStrideComp[FGS_MAX_NUM_COMP];
   FilmGrainCharacteristicsStruct fgcParams;
   GrainSynthesisStruct          *grainSynt;
   uint8_t                        grainSynthesisType;
