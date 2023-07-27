@@ -80,8 +80,9 @@ void create_fgs(uint32_t width, uint32_t height, uint8_t bits)
   }
 }
 
-void setFGSparams(FilmGrainCharacteristicsStruct *sei)
+void setFGSparams(FilmGrainCharacteristicsStruct *sei, uint32_t poc)
 {
+  fgcCTx.poc                                                = poc;
   fgcCTx.fgcParameters.filmGrainModelId                     = sei->filmGrainModelId;
   fgcCTx.fgcParameters.filmGrainCharacteristicsCancelFlag   = sei->filmGrainCharacteristicsCancelFlag;
   fgcCTx.fgcParameters.separateColourDescriptionPresentFlag = sei->separateColourDescriptionPresentFlag;
@@ -131,7 +132,6 @@ void FGS_process(void *Y, void *U, void *V, unsigned int strideY, unsigned int s
 {
   uint8_t *pdecPelFrmOut = NULL;
   pdecPelFrmOut          = malloc(sizeof(uint8_t) * fgcCTx.width * fgcCTx.height);
-  fgcCTx.poc             = 0;
   fgcCTx.idrPicId        = 0;
   fgcCTx.inpBufY         = Y;
   fgcCTx.inpBufU         = U;
