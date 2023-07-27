@@ -80,9 +80,9 @@ void create_fgs(uint32_t width, uint32_t height, uint8_t bits)
   }
 }
 
-void setFGSparams(FilmGrainCharacteristicsStruct *sei, GrainCharacteristicApi *grain_char)
+void setFGSparams(FilmGrainCharacteristicsStruct *sei, uint32_t poc)
 {
-  fgcCTx.poc                                                = grain_char->poc;
+  fgcCTx.poc                                                = poc;
   fgcCTx.fgcParameters.filmGrainModelId                     = sei->filmGrainModelId;
   fgcCTx.fgcParameters.filmGrainCharacteristicsCancelFlag   = sei->filmGrainCharacteristicsCancelFlag;
   fgcCTx.fgcParameters.separateColourDescriptionPresentFlag = sei->separateColourDescriptionPresentFlag;
