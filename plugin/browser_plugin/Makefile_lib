@@ -11,7 +11,7 @@ OBJEXTN=$(TOOLPREFIX).o
 TARGET=libfgs_$(TARGETEXTN)
 
 INCLUDES+=-I../../fgs/include/
-INCLUDES+=-I../../fgs/api
+INCLUDES+=-I../../fgs/api/
 INCLUDES+=-I../../libthread/include/
 
 CFLAGS += -DWIN32 
