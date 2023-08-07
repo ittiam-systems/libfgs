@@ -2,11 +2,12 @@ SRCS=fgs-module.c
 
 LIB=fgs_emcc
 
-LIBNAME=lib$(LIB).a
-
 TARGET=fgs-module.js
 
 DEPS=$(SRCS) Makefile_wasm
+
+INCLUDES+=-I../../fgs/include/
+INCLUDES+=-I../../fgs/api/
 
 all: $(TARGET)
 
@@ -26,7 +27,7 @@ $(TARGET): $(DEPS)
 		'_get_inpBufV', \
 		'_FGS_delete' \
 		]" \
-		$(SRCS) -L. -l$(LIB) -pthread
+		$(SRCS) -L. $(INCLUDES) -l$(LIB) -pthread
 
 clean:
 		-rm $(TARGET)
