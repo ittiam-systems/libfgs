@@ -49,6 +49,12 @@
 #define UNUSED(x) ((void) x)
 #include "fgs_structs.h"
 
+extern void fgs_copy_2d(uint8_t *p_src, int32_t src_stride, uint8_t *p_dst, int32_t dst_stride,
+                    int32_t width, int32_t height, int32_t data_size);
+
+extern void fgs_copy_2d_hbd(uint16_t *p_src, int32_t src_stride, uint16_t *p_dst, int32_t dst_stride,
+                    int32_t width, int32_t height, int32_t data_size);
+
 extern uint32_t block_average_hbd(uint16_t *decSampleBlk, uint32_t widthComp, uint16_t *pNumSamples, uint32_t ySize,
                                   uint32_t xSize, uint8_t blkSz, uint8_t shift_Size, uint8_t bitDepth);
 
