@@ -2215,7 +2215,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
 
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
+    //if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
     {
       uint32_t *tmp = psFgsHandle->offsetArr[compCtr];
       int       i, j;
@@ -2283,7 +2283,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
   lastThread = &psFgsHandle->threadCntxArr[numThreads - 1];
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
+    //if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
     {
       lastThread->fgsArgs.heightComp[compCtr] = heightforLastThr[compCtr];
     }
