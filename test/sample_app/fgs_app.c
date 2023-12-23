@@ -728,7 +728,7 @@ int main(int argc, char *argv[])
   FILE                  *cur_fp        = NULL;
   FILE                  *outputFile    = NULL;
   uint8_t               *pdecPelFrmInp = NULL;
-  unit8_t               *pdecPelFrmOut = NULL;
+  uint8_t               *pdecPelFrmOut = NULL;
   FILE                  *inputFile; /* Input YUV file pointer */
   void                  *psFgsHandle;
   fgs_app_params         sFgsAppParams  = { 0 };

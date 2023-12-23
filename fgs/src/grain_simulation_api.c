@@ -1075,6 +1075,29 @@ uint32_t fgs_simulation_blending_10bit_8x8(fgsProcessArgs *inArgs)
           outSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
         } /* end of component loop */
       }
+      
+      else 
+      {
+        decSampleHbdOffsetY = decHbdComp[compCtr];
+        outSampleHbdOffsetY = outHbdComp[compCtr];
+        //memcpy src to dst
+        fgs_copy_2d_hbd(decSampleHbdOffsetY, strideComp[compCtr],outSampleHbdOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int16_t));
+        
+      }
+    }
+  }
+  else
+  {
+    for (compCtr = 0; compCtr < numComp; compCtr++)
+    {
+      decSampleHbdOffsetY = decHbdComp[compCtr];
+      outSampleHbdOffsetY = outHbdComp[compCtr];
+
+      //memcpy src to dst
+      fgs_copy_2d_hbd(decSampleHbdOffsetY, strideComp[compCtr],outSampleHbdOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int16_t));
+
     }
   }
   return FGS_SUCCESS;
@@ -1344,6 +1367,29 @@ uint32_t fgs_simulation_blending_10bit_16x16(fgsProcessArgs *inArgs)
           outSampleHbdOffsetY += MIN(BLK_16, heightComp[compCtr] - y) * outStrideComp[compCtr];
         } /* end of component loop */
       }
+      
+      else 
+      {
+        decSampleHbdOffsetY = decHbdComp[compCtr];
+        outSampleHbdOffsetY = outHbdComp[compCtr];
+        //memcpy src to dst
+        fgs_copy_2d_hbd(decSampleHbdOffsetY, strideComp[compCtr],outSampleHbdOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int16_t));
+        
+      }
+    }
+  }
+  else
+  {
+    for (compCtr = 0; compCtr < numComp; compCtr++)
+    {
+      decSampleHbdOffsetY = decHbdComp[compCtr];
+      outSampleHbdOffsetY = outHbdComp[compCtr];
+
+      //memcpy src to dst
+      fgs_copy_2d_hbd(decSampleHbdOffsetY, strideComp[compCtr],outSampleHbdOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int16_t));
+
     }
   }
   return FGS_SUCCESS;
@@ -1676,6 +1722,29 @@ uint32_t fgs_simulation_blending_8bit_8x8(fgsProcessArgs *inArgs)
 
         } /* end of component loop */
       }
+
+      else 
+      {
+        decSampleOffsetY = decComp[compCtr];
+        outSampleOffsetY = outComp[compCtr];
+        //memcpy src to dst
+        fgs_copy_2d(decSampleOffsetY, strideComp[compCtr],outSampleOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int16_t));
+        
+      }
+    }
+  }
+  else
+  {
+    for (compCtr = 0; compCtr < numComp; compCtr++)
+    {
+      decSampleOffsetY = decComp[compCtr];
+      outSampleOffsetY = outComp[compCtr];
+
+      //memcpy src to dst
+      fgs_copy_2d(decSampleOffsetY, strideComp[compCtr],outSampleOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int8_t));
+
     }
   }
   return FGS_SUCCESS;
@@ -1942,6 +2011,29 @@ uint32_t fgs_simulation_blending_8bit_16x16(
 
         } /* end of component loop */
       }
+      
+      else 
+      {
+        decSampleOffsetY = decComp[compCtr];
+        outSampleOffsetY = outComp[compCtr];
+        //memcpy src to dst
+        fgs_copy_2d(decSampleOffsetY, strideComp[compCtr],outSampleOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int16_t));
+        
+      }
+    }
+  }
+  else
+  {
+    for (compCtr = 0; compCtr < numComp; compCtr++)
+    {
+      decSampleOffsetY = decComp[compCtr];
+      outSampleOffsetY = outComp[compCtr];
+
+      //memcpy src to dst
+      fgs_copy_2d(decSampleOffsetY, strideComp[compCtr],outSampleOffsetY, outStrideComp[compCtr],
+                  widthComp[compCtr],heightComp[compCtr], sizeof(int8_t));
+
     }
   }
   return FGS_SUCCESS;
@@ -2123,7 +2215,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
 
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
+    //if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
     {
       uint32_t *tmp = psFgsHandle->offsetArr[compCtr];
       int       i, j;
@@ -2155,7 +2247,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
     for (compCtr = 0; compCtr < numComp; compCtr++)
     {
       offsetArr[compCtr] = psFgsHandle->offsetArr[compCtr];
-      if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
+      //if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
       {
         args->fgsArgs.widthComp[compCtr]     = widthComp[compCtr];
         args->fgsArgs.strideComp[compCtr]    = strideComp[compCtr];
@@ -2191,7 +2283,7 @@ uint32_t fgs_process(GrainCharacteristicApi fgsParamStruct, void *handle)
   lastThread = &psFgsHandle->threadCntxArr[numThreads - 1];
   for (compCtr = 0; compCtr < numComp; compCtr++)
   {
-    if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
+    //if (1 == fgsParamStruct.fgcParameters.compModelPresentFlag[compCtr])
     {
       lastThread->fgsArgs.heightComp[compCtr] = heightforLastThr[compCtr];
     }

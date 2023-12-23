@@ -43,9 +43,37 @@
 ---------------------------------------------------------------
 */
 #include <stdint.h>
+#include <string.h>
 #include "fgs_api.h"
 #include "fgs_structs.h"
 #include "grain_simulation_modules.h"
+
+void fgs_copy_2d(uint8_t *p_src, int32_t src_stride, uint8_t *p_dst, int32_t dst_stride,
+                    int32_t width, int32_t height, int32_t data_size)
+{
+  int32_t ctr;
+
+  for(ctr = 0; ctr < height; ctr++)
+  {
+    memcpy(p_dst, p_src, width*data_size);
+    p_src += src_stride;
+    p_dst += dst_stride;
+  }
+}
+
+void fgs_copy_2d_hbd(uint16_t *p_src, int32_t src_stride, uint16_t *p_dst, int32_t dst_stride,
+                    int32_t width, int32_t height, int32_t data_size)
+{
+  int32_t ctr;
+
+  for(ctr = 0; ctr < height; ctr++)
+  {
+    memcpy(p_dst, p_src, width*data_size);
+    p_src += src_stride;
+    p_dst += dst_stride;
+  }
+}
+
 
 /* Function to calculate block average for bit depths > 8 */
 uint32_t block_average_hbd(uint16_t *decSampleBlk, uint32_t widthComp, uint16_t *pNumSamples, uint32_t ySize,
